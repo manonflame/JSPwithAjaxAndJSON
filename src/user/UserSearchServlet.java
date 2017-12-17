@@ -19,13 +19,13 @@ public class UserSearchServlet extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		String userName = request.getParameter("userName");
 		response.getWriter().write(getJSON(userName));
-	}
-	
+	}  
+	 
 	//검색한 정보가 json형태로 출력되도록 함.
 	public String getJSON(String userName) {
 		if(userName == null) userName ="";
 		StringBuffer result = new StringBuffer("");
-		result.append("{\result\":[");
+		result.append("{\"result\":[");
 		UserDAO userDAO = new UserDAO();
 		ArrayList<User> userList = userDAO.search(userName);
 		for(int i= 0; i < userList.size(); i++) {

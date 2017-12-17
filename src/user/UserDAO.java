@@ -13,9 +13,9 @@ public class UserDAO {
 	
 	public UserDAO() {
 		try {
-			String dbURL = "jdbc:mysql://localhost:3306/AJAX";
+			String dbURL = "jdbc:mysql://localhost:3306/AJAX?autoReconnect&u‌​seSSL=false";
 			String dbID = "root";
-			String dbPassword = "root";
+			String dbPassword = "12345";
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(dbURL, dbID, dbPassword);
 		}
@@ -29,7 +29,7 @@ public class UserDAO {
 		ArrayList<User> userList = new ArrayList<User>();
 		try {
 			pstmt = conn.prepareStatement(SQL);
-			pstmt.setString(1,  userName);
+			pstmt.setString(1, "%" + userName + "%" );
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				User user = new User();
@@ -43,6 +43,22 @@ public class UserDAO {
 			e.printStackTrace();
 		}
 		return userList;
+	}
+	
+	public int register(User user) {
+		String SQL = "INSERT INTO USER VALUES(?, ?, ?, ?)";
+		try {
+			pstmt = conn.prepareStatement(SQL);
+			pstmt.setString(1, user.getUserName());
+			pstmt.setInt(2, user.getUserAge());
+			pstmt.setString(3, user.getUserGender());
+			pstmt.setString(4, user.getUserEmail());
+			//성공적으로 등록시 등록된 수 만큼 리턴됨.
+			return pstmt.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return -1;
 	}
 	
 }
